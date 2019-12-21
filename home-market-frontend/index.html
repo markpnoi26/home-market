@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Home Market</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
   </head>
 
   <body>
@@ -17,6 +17,9 @@
       <div class="card">
         <p>Add New Delivery</p>
         <form class="card" method="post">
+          <label>Address: </label>
+          <input type="text" name="" value="">
+          <br>
           <label>Farmers:</label>
           <select class="card" id="farmers-options">
             <option value="1">Jack Ma</option>
@@ -58,6 +61,19 @@
         </form>
       </div>
 
+      <div class="card">
+        <p>Add New Farmer</p>
+        <form class="card" method="post">
+          <label>Farmer Name:</label>
+          <input type="text" name="" value="">
+          <br>
+          <label>Farm Name:</label>
+          <input type="text" name="" value="">
+          <br>
+          <input type="submit">
+        </form>
+      </div>
+
     </main>
 
 
@@ -66,12 +82,10 @@
     </header>
 
     <main>
-      <!-- Add our Pokemon -->
       <div class="card">
         <p>Farmer John</p>
         <button data-trainer-id="1">Add Delivery</button>
         <ul>
-
         </ul>
       </div>
     </main>

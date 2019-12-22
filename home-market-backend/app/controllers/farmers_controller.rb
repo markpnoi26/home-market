@@ -1,22 +1,24 @@
 class FarmersController < ApplicationController
-
+#no need for serialization, not complicated enough
   def index
     farmers = Farmer.all
-    render json: farmers
+    render json: farmers, include: :deliveries
   end
 
   def show
     farmer = Farmer.find_by_id(params[:id])
-    render json: farmer
+    render json: farmer, include: :deliveries
   end
 
   def create
+    farmer = Farmer.create(name: params[:name], farm_name: params[:farm_name])
+    render json: farmer, include: :deliveries
   end
 
   def update
   end
 
-  def update
+  def destroy
   end
 
 end

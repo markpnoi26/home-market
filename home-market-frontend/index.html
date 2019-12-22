@@ -14,20 +14,11 @@
 
     <main>
 
-      <div class="card">
-        <p>Add New Delivery</p>
+      <div class="card" hidden="true">
+        <h2>Add New Delivery</h2>
         <form class="card" method="post">
           <label>Address: </label>
           <input type="text" name="" value="">
-          <br>
-          <label>Farmers:</label>
-          <select class="card" id="farmers-options">
-            <option value="1">Jack Ma</option>
-            <option value="2">Larry Page</option>
-            <option value="3">Mark Zuckerberg</option>
-            <option value="4">Ray Dalio</option>
-            <option value="5">Mark Delgado</option>
-          </select>
           <br>
           <label>Fruits</label>
           <select class="card" id="fruits-options">
@@ -58,35 +49,36 @@
             <option value="4">4</option>
             <option value="5">5</option>
           </select>
+          <br>
+          <input type="submit" name="" value="Add New Delivery">
         </form>
       </div>
 
-      <div class="card">
-        <p>Add New Farmer</p>
-        <form class="card" method="post">
-          <label>Farmer Name:</label>
-          <input type="text" name="" value="">
+      <div class="card" id="new-farmer">
+        <button>Farmer</button>
+        <form class="card" hidden="true">
+          <label>Name:</label>
+          <input type="text">
           <br>
           <label>Farm Name:</label>
-          <input type="text" name="" value="">
+          <input type="text">
           <br>
-          <input type="submit">
+          <input type="submit" value="Add New Farmer">
         </form>
       </div>
 
     </main>
 
-
-    <header>
-      <h2>Farmers</h2>
-    </header>
-
     <main>
-      <div class="card">
-        <p>Farmer John</p>
-        <button data-trainer-id="1">Add Delivery</button>
-        <ul>
-        </ul>
+      <div class="card" id="farmers-collection">
+        <h2>Select Farmers</h2>
+        <form>
+          <label>Farmers:</label>
+          <select class="card" id="farmers-options">
+            <option disabled selected value> -- select an option -- </option>
+          </select>
+          <input type="submit">
+        </form>
       </div>
     </main>
 

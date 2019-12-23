@@ -3,7 +3,6 @@ class CreateFarmers < ActiveRecord::Migration[6.0]
     create_table :farmers do |t|
 
       t.string :name
-      t.string :farm_name
 
       t.timestamps
     end

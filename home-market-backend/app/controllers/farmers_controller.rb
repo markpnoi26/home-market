@@ -1,5 +1,7 @@
 class FarmersController < ApplicationController
-#no need for serialization, not complicated enough
+
+  #no need for serialization, not complicated enough
+  
   def index
     farmers = Farmer.all
     render json: farmers, include: :deliveries
@@ -11,7 +13,7 @@ class FarmersController < ApplicationController
   end
 
   def create
-    farmer = Farmer.create(name: params[:name], farm_name: params[:farm_name])
+    farmer = Farmer.create(name: params[:name])
     render json: farmer, include: :deliveries
   end
 

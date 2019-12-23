@@ -8,11 +8,11 @@
 
 
 farmers = [
-  ["Jack Ma", "Alibaba"],
-  ["Larry Page", "Google"],
-  ["Mark Zuckerberg", "Facebook"],
-  ["Ray Dalio", "Bridgewater Associates"],
-  ["Mark Delgado", "The Next Big Thing"]
+  ["Jack Ma"],
+  ["Larry Page"],
+  ["Mark Zuckerberg"],
+  ["Ray Dalio"],
+  ["Mark Delgado"]
 ]
 
 
@@ -24,7 +24,7 @@ delivery = [
   ["777 Fake Address", "Not Delivered", 1, 5, 1]
 ]
 farmers.each do |farmer|
-  Farmer.create(name: farmer[0], farm_name: farmer[1])
+  Farmer.create(name: farmer[0])
 end
 
 delivery.each do |delivery|

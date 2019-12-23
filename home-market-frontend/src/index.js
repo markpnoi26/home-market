@@ -1,25 +1,21 @@
-// code goes here
-// more comments on this
 
 document.addEventListener("DOMContentLoaded", () =>{
   console.log("DOM Loaded!")
   addAllFarmers()
 })
 
-// event listeners
+/* EVENT LISTENERS */
 
-
+// to unhide adding new farmer
 let newFarmer = document.getElementById("new-farmer")
 newFarmer.addEventListener("click", (e) => {
   e.preventDefault();
   let inputs = newFarmer.querySelectorAll("input");
-  if (e.target.value ===  "Add New Farmer" &&
-      inputs[0].value != "" &&
-      inputs[1].value != "") {
-    addFarmerToDb(inputs[0].value, inputs[1].value)
+  if (e.target ===  newFarmer.querySelectorAll("input")[1] &&
+      inputs[0].value != "") {
+    addFarmerToDb(inputs[0].value)
     inputs[0].value = "";
-    inputs[1].value = "";
-  } else if (e.target.innerHTML === "Farmer"){
+  } else if (e.target === newFarmer.querySelectorAll("button")[0]){
     let form = e.target.parentNode.querySelector("form");
     if (form.hidden === false) {
       form.hidden = true
@@ -29,9 +25,26 @@ newFarmer.addEventListener("click", (e) => {
   }
 })
 
+// to fetch the farmer on View Farmer
+let collection = document.getElementById("farmers-collection")
+collection.addEventListener("click", e => {
+  e.preventDefault();
+  if (e.target === collection.querySelector("input")) {
+    let farmers = document.getElementById("farmers-options");
+    fetch(`http://localhost:3000/farmers/${farmers.options[farmers.selectedIndex].value}`)
+      .then(response => {
+        return response.json()
+      })
+      .then(farmer => {
+        console.log(farmer.deliveries);
+        console.dir(farmer.deliveries)
+      })
+  }
+})
 
-// Populators
+/* PAGE POPULATOR FUNCTIONS */
 
+// add all farmer options
 function addAllFarmers() {
   fetch("http://localhost:3000/farmers")
     .then(response => {
@@ -49,11 +62,9 @@ function addAllFarmers() {
 }
 
 // add new Farmer to DB
-
-function addFarmerToDb(farmer, farm) {
+function addFarmerToDb(farmer) {
   let formData = {
-    name: farmer,
-    farm_name: farm
+    name: farmer
   };
   let configObj = {
     method: "POST",
@@ -63,7 +74,7 @@ function addFarmerToDb(farmer, farm) {
     },
     body: JSON.stringify(formData)
   };
-  return fetch('http://localhost:3000/farmers', configObj)
+  fetch('http://localhost:3000/farmers', configObj)
     .then(response => {
       return response.json()
     })
@@ -76,7 +87,16 @@ function addFarmerToDb(farmer, farm) {
     })
 }
 
+/* CLASSES USED TO CREATE */
 
-// on load, load all selection for farmer selection
-// on farmer select, add form for Delivery
-// on farmer select, display all farmer's delivery
+class FarmerCard {
+  constructor(name){
+
+  }
+}
+
+class DeliveryCard {
+  constructor(delivery) {
+
+  }
+}

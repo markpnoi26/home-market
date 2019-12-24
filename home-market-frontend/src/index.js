@@ -25,7 +25,7 @@ newFarmer.addEventListener("click", (e) => {
   }
 })
 
-// to fetch the farmer on View Farmer
+// to fetch the farmer on View Farmer and all its deliveries
 let collection = document.getElementById("farmers-collection")
 collection.addEventListener("click", e => {
   e.preventDefault();
@@ -36,7 +36,6 @@ collection.addEventListener("click", e => {
         return response.json()
       })
       .then(farmer => {
-        // console.log(farmer.name)
         if (farmer.name != undefined) {
           FarmerCard.createFarmerCard(farmer.name);
           console.log(farmer.deliveries);
@@ -98,8 +97,11 @@ class FarmerCard {
     for (let i = 0; i < 3; i++) {
       card.appendChild(document.createElement("div"));
     }
-    card.childNodes[1].innerHTML = `<h2>${name}</h2>
-    <button>Add New Delivery</button>`;
+    card.childNodes[1].innerHTML =
+    `
+    <h2>${name}</h2>
+    <button>Add New Delivery</button>
+    `;
     card.childNodes[2].id = "deliveries-not-delivered";
     card.childNodes[2].innerHTML = `<h3>Not Delivered</h3>`;
     card.childNodes[3].id = "deliveries-delivered";

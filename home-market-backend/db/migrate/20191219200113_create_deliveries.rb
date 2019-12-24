@@ -3,11 +3,11 @@ class CreateDeliveries < ActiveRecord::Migration[6.0]
     create_table :deliveries do |t|
 
       t.string :delivery_address
-      t.string :status
       t.integer :eggs
       t.integer :fruits
       t.integer :vegetables
       t.integer :farmer_id
+      t.boolean :delivered, default: false
 
       t.timestamps
     end

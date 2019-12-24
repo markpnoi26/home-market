@@ -36,8 +36,11 @@ collection.addEventListener("click", e => {
         return response.json()
       })
       .then(farmer => {
-        console.log(farmer.deliveries);
-        console.dir(farmer.deliveries)
+        // console.log(farmer.name)
+        if (farmer.name != undefined) {
+          FarmerCard.createFarmerCard(farmer.name);
+          console.log(farmer.deliveries);
+        }
       })
   }
 })
@@ -90,13 +93,29 @@ function addFarmerToDb(farmer) {
 /* CLASSES USED TO CREATE */
 
 class FarmerCard {
-  constructor(name){
-
+  static createFarmerCard(name) {
+    let card = document.getElementById("farmer-card");
+    for (let i = 0; i < 3; i++) {
+      card.appendChild(document.createElement("div"));
+    }
+    card.childNodes[1].innerHTML = `<h2>${name}</h2>
+    <button>Add New Delivery</button>`;
+    card.childNodes[2].id = "deliveries-not-delivered";
+    card.childNodes[2].innerHTML = `<h3>Not Delivered</h3>`;
+    card.childNodes[3].id = "deliveries-delivered";
+    card.childNodes[3].innerHTML = `<h3>Delivered</h3>`;
   }
-}
 
-class DeliveryCard {
-  constructor(delivery) {
-
-  }
+  // static populateFarmerDelivery() {
+  //   let delivered = document.getElementById("deliveries-delivered");
+  //   delivered.innerHTML =
+  //     `<div>
+  //       <ul> To: Fake Address #1
+  //         <li>eggs: 4 <button>+</button><button>-</button></li>
+  //         <li>vegetables: 3 <button>+</button><button>-</button></li>
+  //         <li>fruits: 1 <button>+</button><button>-</button></li>
+  //       </ul>
+  //       <button>Change to Delivered</button>
+  //     </div>`
+  // }
 }

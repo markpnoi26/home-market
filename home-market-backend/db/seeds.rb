@@ -17,16 +17,16 @@ farmers = [
 
 
 delivery = [
-  ["123 Fake Address", "Not Delivered", 5, 0, 4],
-  ["231 Fake Address", "Not Delivered", 4, 3, 2],
-  ["447 Fake Address", "Not Delivered", 2, 4, 5],
-  ["567 Fake Address", "Not Delivered", 5, 1, 2],
-  ["777 Fake Address", "Not Delivered", 1, 5, 1]
+  ["123 Fake Address", 5, 0, 4],
+  ["231 Fake Address", 4, 3, 2],
+  ["447 Fake Address", 2, 4, 5],
+  ["567 Fake Address", 5, 1, 2],
+  ["777 Fake Address", 1, 5, 1]
 ]
 farmers.each do |farmer|
   Farmer.create(name: farmer[0])
 end
 
 delivery.each do |delivery|
-  Delivery.create(delivery_address: delivery[0], status: delivery[1], eggs: delivery[2], fruits: delivery[3], vegetables: delivery[4], farmer_id: rand(1...5))
+  Delivery.create(delivery_address: delivery[0], eggs: delivery[1], fruits: delivery[2], vegetables: delivery[3], farmer_id: rand(1...5))
 end

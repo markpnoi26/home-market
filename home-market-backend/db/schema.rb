@@ -14,18 +14,17 @@ ActiveRecord::Schema.define(version: 2019_12_19_200113) do
 
   create_table "deliveries", force: :cascade do |t|
     t.string "delivery_address"
-    t.string "status"
     t.integer "eggs"
     t.integer "fruits"
     t.integer "vegetables"
     t.integer "farmer_id"
+    t.boolean "delivered", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "farmers", force: :cascade do |t|
     t.string "name"
-    t.string "farm_name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

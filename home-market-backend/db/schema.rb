@@ -14,9 +14,9 @@ ActiveRecord::Schema.define(version: 2019_12_19_200113) do
 
   create_table "deliveries", force: :cascade do |t|
     t.string "delivery_address"
-    t.integer "eggs"
-    t.integer "fruits"
-    t.integer "vegetables"
+    t.integer "eggs", default: 0
+    t.integer "fruits", default: 0
+    t.integer "vegetables", default: 0
     t.integer "farmer_id"
     t.boolean "delivered", default: false
     t.datetime "created_at", precision: 6, null: false

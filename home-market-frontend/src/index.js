@@ -37,8 +37,13 @@ collection.addEventListener("click", e => {
       })
       .then(farmer => {
         if (farmer.name != undefined) {
-          FarmerCard.createFarmerCard(farmer.name);
-          console.log(farmer.deliveries);
+          FarmerCard.createFarmerCard(farmer);
+          farmer.deliveries.forEach(delivery => {
+            if (delivery.delivered === false) {
+              FarmerCard.populateFarmerDelivery(delivery)
+            }
+            console.log(delivery)
+          });
         }
       })
   }
@@ -92,32 +97,51 @@ function addFarmerToDb(farmer) {
 /* CLASSES USED TO CREATE */
 
 class FarmerCard {
-  static createFarmerCard(name) {
+  static createFarmerCard(farmer) {
     let card = document.getElementById("farmer-card");
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 2; i++) {
       card.appendChild(document.createElement("div"));
     }
     card.childNodes[1].innerHTML =
     `
-    <h2>${name}</h2>
-    <button>Add New Delivery</button>
+    <h2>${farmer.name}</h2>
+    <div id="new-delivery">
+      <form>
+        <label>Address:</label>
+        <input type="text">
+        <input type="submit" value="Add New Delivery">
+      </form>
+    </div>
     `;
-    card.childNodes[2].id = "deliveries-not-delivered";
-    card.childNodes[2].innerHTML = `<h3>Not Delivered</h3>`;
-    card.childNodes[3].id = "deliveries-delivered";
-    card.childNodes[3].innerHTML = `<h3>Delivered</h3>`;
+    card.setAttribute('farmer-id', farmer.id)
+    card.childNodes[2].id = "deliveries";
+    card.childNodes[2].innerHTML = `<h5>Deliveries by ${farmer.name}</h5>`;
   }
 
-  // static populateFarmerDelivery() {
-  //   let delivered = document.getElementById("deliveries-delivered");
-  //   delivered.innerHTML =
-  //     `<div>
-  //       <ul> To: Fake Address #1
-  //         <li>eggs: 4 <button>+</button><button>-</button></li>
-  //         <li>vegetables: 3 <button>+</button><button>-</button></li>
-  //         <li>fruits: 1 <button>+</button><button>-</button></li>
-  //       </ul>
-  //       <button>Change to Delivered</button>
-  //     </div>`
-  // }
+  static populateFarmerDelivery(delivery) {
+    let delivered = document.getElementById("deliveries");
+    let deliveryDiv = document.createElement("div")
+    deliveryDiv.setAttribute('delivery-id', delivery.id)
+    deliveryDiv.innerHTML =
+    ` Delivery to: ${delivery.delivery_address}
+      <ul>
+        <li>eggs: ${delivery.eggs} <button>+</button><button>-</button></li>
+        <li>vegetables: ${delivery.vegetables} <button>+</button><button>-</button></li>
+        <li>fruits: ${delivery.fruits} <button>+</button><button>-</button></li>
+      </ul>
+      <button>Delivered</button>`
+    delivered.appendChild(deliveryDiv)
+  }
+
+  static addNewDelivery(farmer) {
+
+  }
+
+  static addItem(delivery, item) {
+
+  }
+
+  static subtractItem(delivery, item) {
+
+  }
 }

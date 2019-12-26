@@ -1,4 +1,4 @@
-
+/* Document Load*/
 document.addEventListener("DOMContentLoaded", () =>{
   console.log("DOM Loaded!")
   addAllFarmers()
@@ -6,8 +6,8 @@ document.addEventListener("DOMContentLoaded", () =>{
 
 /* EVENT LISTENERS */
 
-// to unhide adding new farmer
-let newFarmer = document.getElementById("new-farmer")
+// To add new Farmer to DB
+const newFarmer = document.getElementById("new-farmer")
 newFarmer.addEventListener("click", (e) => {
   e.preventDefault();
   let inputs = newFarmer.querySelectorAll("input");
@@ -15,18 +15,11 @@ newFarmer.addEventListener("click", (e) => {
       inputs[0].value != "") {
     addFarmerToDb(inputs[0].value)
     inputs[0].value = "";
-  } else if (e.target === newFarmer.querySelectorAll("button")[0]){
-    let form = e.target.parentNode.querySelector("form");
-    if (form.hidden === false) {
-      form.hidden = true
-    } else {
-      form.hidden = false
-    }
   }
 })
 
 // to fetch the farmer on View Farmer and all its deliveries
-let collection = document.getElementById("farmers-collection")
+const collection = document.getElementById("farmers-collection")
 collection.addEventListener("click", e => {
   e.preventDefault();
   if (e.target === collection.querySelector("input")) {
@@ -36,8 +29,9 @@ collection.addEventListener("click", e => {
         return response.json()
       })
       .then(farmer => {
-        if (farmer.name != undefined) {
-          newFarmer = new FarmerCard(farmer.name, farmer.id, farmer.deliveries)
+        let farmerData = farmer.data;
+        if (farmerData.attributes.name != undefined) {
+          let newFarmer = new FarmerCard(farmerData.attributes.name, farmerData.id, farmerData.attributes.deliveries)
           newFarmer.createFarmerCard()
           newFarmer.populateFarmerDelivery()
         }
@@ -55,10 +49,10 @@ function addAllFarmers() {
     })
     .then(json => {
       let farmerOptions = document.getElementById("farmers-options")
-      json.forEach(farmer => {
+      json.data.forEach(farmer => {
         let option = document.createElement("option");
         option.value = `${farmer.id}`
-        option.innerHTML = `${farmer.name}`
+        option.innerHTML = `${farmer.attributes.name}`
         farmerOptions.appendChild(option)
       })
     })
@@ -82,10 +76,11 @@ function addFarmerToDb(farmer) {
       return response.json()
     })
     .then(farmer => {
+      // console.log(farmer.data.attributes)
       let farmerOptions = document.getElementById("farmers-options")
       let option = document.createElement("option");
       option.value = `${farmer.id}`
-      option.innerHTML = `${farmer.name}`
+      option.innerHTML = `${farmer.data.attributes.name}`
       farmerOptions.appendChild(option)
     })
 }
@@ -101,10 +96,9 @@ class FarmerCard {
 
   createFarmerCard() {
     let card = document.getElementById("farmer-card");
-    for (let i = 0; i < 2; i++) {
-      card.appendChild(document.createElement("div"));
-    }
-    card.childNodes[1].innerHTML =
+    card.innerHTML =`<div></div><div></div>`;
+    // console.log(card.childNodes)
+    card.childNodes[0].innerHTML =
     `
     <h2>${this.name}</h2>
     <div id="new-delivery">
@@ -116,29 +110,29 @@ class FarmerCard {
     </div>
     `;
     card.setAttribute('farmer-id', this.id);
-    card.childNodes[2].id = "deliveries";
-    card.childNodes[2].innerHTML = `<h5>Deliveries by ${this.name}</h5>`;
+    card.childNodes[1].id = "deliveries";
 
     card.addEventListener("click", e => {
       e.preventDefault();
       if (e.target === card.querySelectorAll("input")[1] && card.querySelector("input").value != "") {
-        this.addNewDelivery(card.querySelector("input").value, this.id);
+        this.addNewDelivery(card.querySelector("input").value);
         card.querySelector("input").value = "";
       }
     })
   }
 
   populateFarmerDelivery() {
+    document.getElementById("deliveries").innerHTML = `<h5>Deliveries by ${this.name}</h5>`;
     this.deliveries.forEach(delivery => {
       let newDelivery = new DeliveryCard(delivery.id, delivery.delivery_address, this.id, delivery.eggs, delivery.vegetables, delivery.fruits, delivery.delivered);
       newDelivery.populateDeliveryCard();
     })
   }
 
-  addNewDelivery(address, id) {
+  addNewDelivery(address) {
     let formData = {
       address: address,
-      farmer_id: id,
+      farmer_id: this.id,
     };
     let configObj = {
       method: "POST",

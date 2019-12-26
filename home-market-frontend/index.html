@@ -3,14 +3,13 @@
   <head>
     <meta charset="utf-8">
     <title>Home Market</title>
-    <!-- <link rel="stylesheet" href="style.css"> -->
   </head>
 
   <body>
     <main>
       <div class="card" id="new-farmer">
-        <button>New Farmer?</button>
-        <form class="card" hidden="true">
+        <h2>New Farmer?</h2>
+        <form class="card">
           <label>Name:</label>
           <input type="text">
           <input type="submit" value="Add To DB">
@@ -20,7 +19,7 @@
 
     <main>
       <div class="card" id="farmers-collection">
-        <h2>Select Farmers</h2>
+        <h2>Select Existing Farmers</h2>
         <form>
           <select class="card" id="farmers-options">
             <option disabled selected value> -- select an option -- </option>
@@ -32,11 +31,8 @@
 
     <main id="farmer-card">
     </main>
-
-    <script src="./src/index.js"></script>
-
   </body>
 
-  </body>
+  <script src="./src/index.js"></script>
 
 </html>

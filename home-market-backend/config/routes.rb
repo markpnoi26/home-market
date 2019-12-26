@@ -2,5 +2,5 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   resources :farmers
-  resources :deliveries, except: [:index, :show, :destroy]
+  resources :deliveries, except: [:index, :show]
 end

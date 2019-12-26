@@ -37,13 +37,9 @@ collection.addEventListener("click", e => {
       })
       .then(farmer => {
         if (farmer.name != undefined) {
-          FarmerCard.createFarmerCard(farmer);
-          farmer.deliveries.forEach(delivery => {
-            if (delivery.delivered === false) {
-              FarmerCard.populateFarmerDelivery(delivery)
-            }
-            console.log(delivery)
-          });
+          newFarmer = new FarmerCard(farmer.name, farmer.id, farmer.deliveries)
+          newFarmer.createFarmerCard()
+          newFarmer.populateFarmerDelivery()
         }
       })
   }
@@ -97,14 +93,20 @@ function addFarmerToDb(farmer) {
 /* CLASSES USED TO CREATE */
 
 class FarmerCard {
-  static createFarmerCard(farmer) {
+  constructor (name, id, deliveries) {
+    this.name = name;
+    this.id = id;
+    this.deliveries = deliveries;
+  }
+
+  createFarmerCard() {
     let card = document.getElementById("farmer-card");
     for (let i = 0; i < 2; i++) {
       card.appendChild(document.createElement("div"));
     }
     card.childNodes[1].innerHTML =
     `
-    <h2>${farmer.name}</h2>
+    <h2>${this.name}</h2>
     <div id="new-delivery">
       <form>
         <label>Address:</label>
@@ -113,35 +115,195 @@ class FarmerCard {
       </form>
     </div>
     `;
-    card.setAttribute('farmer-id', farmer.id)
+    card.setAttribute('farmer-id', this.id);
     card.childNodes[2].id = "deliveries";
-    card.childNodes[2].innerHTML = `<h5>Deliveries by ${farmer.name}</h5>`;
+    card.childNodes[2].innerHTML = `<h5>Deliveries by ${this.name}</h5>`;
+
+    card.addEventListener("click", e => {
+      e.preventDefault();
+      if (e.target === card.querySelectorAll("input")[1] && card.querySelector("input").value != "") {
+        this.addNewDelivery(card.querySelector("input").value, this.id);
+        card.querySelector("input").value = "";
+      }
+    })
   }
 
-  static populateFarmerDelivery(delivery) {
+  populateFarmerDelivery() {
+    this.deliveries.forEach(delivery => {
+      let newDelivery = new DeliveryCard(delivery.id, delivery.delivery_address, this.id, delivery.eggs, delivery.vegetables, delivery.fruits, delivery.delivered);
+      newDelivery.populateDeliveryCard();
+    })
+  }
+
+  addNewDelivery(address, id) {
+    let formData = {
+      address: address,
+      farmer_id: id,
+    };
+    let configObj = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(formData)
+    };
+    fetch("http://localhost:3000/deliveries", configObj)
+      .then(response => response.json())
+      .then(delivery => {
+        let newDelivery = new DeliveryCard(delivery.id, delivery.delivery_address, this.id, delivery.eggs, delivery.vegetables, delivery.fruits, delivery.delivered);
+        newDelivery.populateDeliveryCard();
+      })
+  }
+}
+
+
+class DeliveryCard {
+  constructor(id, address, farmer_id, eggs, vegetables, fruits, delivered) {
+    this.id = id,
+    this.delivery_address = address,
+    this.farmer_id = farmer_id,
+    this.eggs = eggs,
+    this.vegetables = vegetables,
+    this.fruits = fruits
+    this.delivered = delivered
+  }
+
+  set egg_count(egg_count) {
+    this.eggs = egg_count
+  }
+
+  set veg_count(veg_count) {
+    this.vegetables = veg_count
+  }
+
+  set fruit_count(fruit_count) {
+    this.fruits = fruit_count
+  }
+
+  get egg_count() {
+    return this.eggs
+  }
+
+  get veg_count() {
+    return this.vegetables
+  }
+
+  get fruit_count() {
+    return this.fruits
+  }
+
+  populateDeliveryCard() {
     let delivered = document.getElementById("deliveries");
     let deliveryDiv = document.createElement("div")
-    deliveryDiv.setAttribute('delivery-id', delivery.id)
+    deliveryDiv.setAttribute('delivery-id', this.id)
     deliveryDiv.innerHTML =
-    ` Delivery to: ${delivery.delivery_address}
+    ` Delivery to: ${this.delivery_address}
       <ul>
-        <li>eggs: ${delivery.eggs} <button>+</button><button>-</button></li>
-        <li>vegetables: ${delivery.vegetables} <button>+</button><button>-</button></li>
-        <li>fruits: ${delivery.fruits} <button>+</button><button>-</button></li>
+        <li>eggs: <span>${this.egg_count}</span> <button>+</button><button>-</button></li>
+        <li>vegetables: <span>${this.veg_count}</span> <button>+</button><button>-</button></li>
+        <li>fruits: <span>${this.fruit_count}</span> <button>+</button><button>-</button></li>
+        <li>delivered?  <strong><span>${this.delivered}</span></strong> </li>
       </ul>
-      <button>Delivered</button>`
+      <button>Toggle Deliver</button><button>Delete</button>`
     delivered.appendChild(deliveryDiv)
+    deliveryDiv.addEventListener("click", e => {
+      if (e.target === deliveryDiv.querySelectorAll("button")[0]) {
+        this.addItem(this.id, "eggs")
+          .then(value => {
+            deliveryDiv.querySelectorAll("button")[0].parentNode.querySelector("span").innerHTML = `${value}`
+          })
+      } else if (e.target === deliveryDiv.querySelectorAll("button")[2]) {
+        this.addItem(this.id, "vegetables")
+          .then(value => {
+            deliveryDiv.querySelectorAll("button")[2].parentNode.querySelector("span").innerHTML = `${value}`
+          })
+      } else if (e.target === deliveryDiv.querySelectorAll("button")[4]) {
+        this.addItem(this.id, "fruits")
+          .then(value => {
+            deliveryDiv.querySelectorAll("button")[4].parentNode.querySelector("span").innerHTML = `${value}`
+          })
+      } else if (e.target === deliveryDiv.querySelectorAll("button")[1] && deliveryDiv.querySelectorAll("span")[0].innerHTML > 0) {
+        this.subtractItem(this.id, "eggs")
+          .then(value => {
+            deliveryDiv.querySelectorAll("button")[1].parentNode.querySelector("span").innerHTML = `${value}`
+          })
+      } else if (e.target === deliveryDiv.querySelectorAll("button")[3] && deliveryDiv.querySelectorAll("span")[1].innerHTML > 0) {
+        this.subtractItem(this.id, "vegetables")
+          .then(value => {
+            deliveryDiv.querySelectorAll("button")[3].parentNode.querySelector("span").innerHTML = `${value}`
+          })
+      } else if (e.target === deliveryDiv.querySelectorAll("button")[5] && deliveryDiv.querySelectorAll("span")[2].innerHTML > 0) {
+        this.subtractItem(this.id, "fruits")
+          .then(value => {
+            deliveryDiv.querySelectorAll("button")[5].parentNode.querySelector("span").innerHTML = `${value}`
+          })
+      } else if (e.target === deliveryDiv.querySelectorAll("button")[6]) {
+        this.deliver(this.id)
+          .then(value => {
+            deliveryDiv.querySelectorAll("span")[3].innerHTML = `${value}`
+          })
+      } else if (e.target === deliveryDiv.querySelectorAll("button")[7]) {
+        this.destroyDelivery(this.id)
+          .then(value => {
+            deliveryDiv.innerHTML = `${value.message}`
+          })
+      }
+    })
   }
 
-  static addNewDelivery(farmer) {
-
+  addItem(delivery_id, item) {
+    let formData = {
+      item: item,
+      patch_value: "add"
+    };
+    let configObj = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(formData)
+    };
+    return fetch(`http://localhost:3000/deliveries/${delivery_id}`, configObj)
+      .then(response => response.json())
   }
 
-  static addItem(delivery, item) {
-
+  subtractItem(delivery_id, item) {
+    let formData = {
+      item: item,
+      patch_value: "sub"
+    };
+    let configObj = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(formData)
+    };
+    return fetch(`http://localhost:3000/deliveries/${delivery_id}`, configObj)
+      .then(response => response.json())
   }
 
-  static subtractItem(delivery, item) {
+  deliver(delivery_id) {
+    let formData = {
+      patch_value: "toggle"
+    };
+    let configObj = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(formData)
+    };
+    return fetch(`http://localhost:3000/deliveries/${delivery_id}`, configObj)
+      .then(response => response.json())
+  }
 
+  destroyDelivery(delivery_id) {
+    return fetch(`http://localhost:3000/deliveries/${delivery_id}`, {method: "DELETE"})
+      .then(response => response.json())
   }
 }

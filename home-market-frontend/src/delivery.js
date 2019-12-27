@@ -38,7 +38,7 @@ class DeliveryCard {
     let deliveryDiv = document.createElement("div")
     deliveryDiv.setAttribute('delivery-id', this.id)
     deliveryDiv.innerHTML =
-    ` Delivery to: ${this.delivery_address}
+    `Delivery to: ${this.delivery_address}
       <ul>
         <li>eggs: <span>${this.egg_count}</span> <button>+</button><button>-</button></li>
         <li>vegetables: <span>${this.veg_count}</span> <button>+</button><button>-</button></li>
@@ -81,7 +81,7 @@ class DeliveryCard {
       } else if (e.target === deliveryDiv.querySelectorAll("button")[6]) {
         this.deliver(this.id)
           .then(value => {
-            deliveryDiv.querySelectorAll("span")[3].innerHTML = `${value}`
+            deliveryDiv.querySelectorAll("span")[3].innerHTML = `${value}`;
           })
       } else if (e.target === deliveryDiv.querySelectorAll("button")[7]) {
         this.destroyDelivery(this.id)

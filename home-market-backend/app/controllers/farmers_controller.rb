@@ -15,7 +15,7 @@ class FarmersController < ApplicationController
   end
 
   def create
-    farmer = Farmer.create(name: params[:name])
+    farmer = Farmer.find_or_create_by(name: params[:name])
     # render json: farmer, include: :deliveries
     render json: FarmerSerializer.new(farmer)
   end

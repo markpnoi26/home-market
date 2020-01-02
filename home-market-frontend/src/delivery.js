@@ -33,7 +33,7 @@ class DeliveryCard {
     return this.fruits
   }
 
-  populateDeliveryCard() {
+  populateDeliveryCard = () => {
     let delivered = document.getElementById("deliveries");
     let deliveryDiv = document.createElement("div")
     deliveryDiv.setAttribute('delivery-id', this.id)
@@ -92,7 +92,7 @@ class DeliveryCard {
     })
   }
 
-  addItem(delivery_id, item) {
+  addItem = (delivery_id, item) => {
     let formData = {
       item: item,
       patch_value: "add"
@@ -109,7 +109,7 @@ class DeliveryCard {
       .then(response => response.json())
   }
 
-  subtractItem(delivery_id, item) {
+  subtractItem = (delivery_id, item) => {
     let formData = {
       item: item,
       patch_value: "sub"
@@ -126,7 +126,7 @@ class DeliveryCard {
       .then(response => response.json())
   }
 
-  deliver(delivery_id) {
+  deliver = (delivery_id) => {
     let formData = {
       patch_value: "toggle"
     };
@@ -142,7 +142,7 @@ class DeliveryCard {
       .then(response => response.json())
   }
 
-  destroyDelivery(delivery_id) {
+  destroyDelivery = (delivery_id) => {
     return fetch(`http://localhost:3000/deliveries/${delivery_id}`, {method: "DELETE"})
       .then(response => response.json())
   }

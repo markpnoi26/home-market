@@ -5,7 +5,7 @@ class FarmerCard {
     this.deliveries = deliveries;
   }
 
-  createFarmerCard() {
+  createFarmerCard = () => {
     let card = document.getElementById("farmer-card");
     card.innerHTML =`<div></div><div></div>`;
     card.childNodes[0].innerHTML =
@@ -32,7 +32,7 @@ class FarmerCard {
     })
   }
 
-  populateFarmerDelivery() {
+  populateFarmerDelivery = () => {
     document.getElementById("deliveries").innerHTML = `<h5>Deliveries by ${this.name}</h5>`;
     this.deliveries.forEach(delivery => {
       let newDelivery = new DeliveryCard(delivery.id, delivery.delivery_address, this.id, delivery.eggs, delivery.vegetables, delivery.fruits, delivery.delivered);
@@ -40,7 +40,7 @@ class FarmerCard {
     })
   }
 
-  addNewDelivery(address) {
+  addNewDelivery = (address) => {
     const deliveryCard = document.getElementById('farmer-card');
     const deliveryCardId = deliveryCard.getAttribute('farmer-id')
     // console.log(deliveryCardId)

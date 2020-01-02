@@ -18,6 +18,36 @@ newFarmer.addEventListener("click", (e) => {
   }
 })
 
+// sort button
+
+const sortButton = document.getElementById("sort-farmer-button")
+sortButton.addEventListener("click", e => {
+  console.log("sort button was clicked!")
+  fetch('http://localhost:3000/farmers')
+    .then(response => response.json())
+    .then(farmers => {
+      farmers.data.sort(function(a, b) {
+        let nameA = a.attributes.name.toUpperCase();
+        let nameB = b.attributes.name.toUpperCase();
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        return 0;
+      });
+      console.log(farmers.data)
+      farmers.data.forEach(farmer => {
+        let newFarmer = document.createElement("li");
+        let sortedList = document.getElementById("sorted-list")
+        newFarmer.innerText = `${farmer.attributes.name}`
+        sortedList.appendChild(newFarmer)
+      })
+    })
+})
+
+
 // to fetch the farmer on View Farmer and all its deliveries
 const collection = document.getElementById("farmers-collection")
 collection.addEventListener("click", e => {

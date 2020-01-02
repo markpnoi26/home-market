@@ -1,1 +1,1 @@
-Some Read Me for the front end of stuff
+Open index.js after running backend rails.

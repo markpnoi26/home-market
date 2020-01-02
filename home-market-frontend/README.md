@@ -1,1 +1,1 @@
-Open index.js after running backend rails.
+Open ```index.html``` after running backend rails.
